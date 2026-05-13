@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDM K4→K5 答辩评委问题</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 32px 24px 28px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+  .header p { margin-top: 8px; font-size: 13px; opacity: 0.7; }
+  .header .badge {
+    display: inline-block; margin-top: 12px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 4px 14px; font-size: 12px;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+  .tip {
+    background: #fff8e1; border-left: 4px solid #ffc107;
+    border-radius: 0 8px 8px 0; padding: 10px 14px;
+    font-size: 13px; color: #795548; margin-bottom: 20px;
+  }
+
+  /* Candidate Section */
+  .candidate-section {
+    background: white; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 16px; overflow: hidden;
+  }
+  .candidate-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; cursor: pointer;
+    background: linear-gradient(90deg, #1a1a2e 0%, #0f3460 100%);
+    color: white; user-select: none;
+    transition: opacity 0.2s;
+  }
+  .candidate-header:hover { opacity: 0.9; }
+  .cand-name { font-size: 16px; font-weight: 600; flex: 1; }
+  .cand-count { font-size: 12px; opacity: 0.6; }
+  .chevron {
+    width: 20px; height: 20px; stroke: white; fill: none;
+    stroke-width: 2; transition: transform 0.3s;
+  }
+  .chevron.open { transform: rotate(180deg); }
+  .candidate-body { padding: 0 16px 8px; }
+
+  /* Question Card */
+  .question-card {
+    border-bottom: 1px solid #f0f0f0; padding: 16px 4px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .question-card:last-child { border-bottom: none; }
+  .question-number {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #0f3460; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+  .question-content { flex: 1; }
+  .cn-text {
+    font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .en-text {
+    font-size: 13px; line-height: 1.6; color: #1565c0;
+    background: #e8f4fd; border-radius: 6px; padding: 8px 12px;
+    margin-bottom: 10px; font-style: italic;
+  }
+
+  /* Player */
+  .player {
+    display: flex; align-items: center; gap: 10px;
+    background: #f8f9fa; border-radius: 8px; padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+  }
+  .btn-play {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #0f3460; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s; outline: none;
+  }
+  .btn-play:hover { background: #1565c0; }
+  .btn-play.playing { background: #1565c0; }
+  .btn-play svg { width: 14px; height: 14px; fill: white; stroke: none; }
+  .progress-area { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .time-display { font-size: 11px; color: #888; width: 28px; flex-shrink: 0; }
+  .progress-bar {
+    flex: 1; height: 6px; background: #ddd; border-radius: 3px;
+    position: relative; cursor: pointer; overflow: visible;
+  }
+  .progress-fill {
+    height: 100%; background: #0f3460; border-radius: 3px;
+    width: 0%; transition: none; pointer-events: none;
+  }
+  .progress-thumb {
+    position: absolute; top: 50%; right: calc(100% - 0%);
+    transform: translate(50%, -50%);
+    width: 14px; height: 14px; background: #0f3460;
+    border-radius: 50%; border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    pointer-events: none; opacity: 0; transition: opacity 0.15s;
+  }
+  .progress-bar:hover .progress-thumb { opacity: 1; }
+  .speed-group { display: flex; gap: 3px; flex-shrink: 0; }
+  .btn-speed {
+    padding: 3px 7px; border: 1px solid #ccc; border-radius: 4px;
+    background: white; font-size: 11px; cursor: pointer; color: #555;
+    transition: all 0.15s; outline: none;
+  }
+  .btn-speed.active-speed {
+    background: #0f3460; color: white; border-color: #0f3460;
+  }
+  .btn-speed:hover { border-color: #0f3460; color: #0f3460; }
+  .btn-speed.active-speed:hover { background: #1565c0; border-color: #1565c0; color: white; }
+  .btn-stop {
+    width: 28px; height: 28px; border-radius: 6px; border: 1px solid #ccc;
+    background: white; font-size: 12px; cursor: pointer; color: #888;
+    flex-shrink: 0; outline: none; transition: all 0.15s;
+  }
+  .btn-stop:hover { border-color: #e53935; color: #e53935; }
+
+  @media (max-width: 600px) {
+    .speed-group { display: none; }
+    .btn-stop { display: none; }
+    .player { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎯 BDM K4 → K5 答辩评委问题</h1>
+  <p>Interview Questions — Defense Day 2026</p>
+  <div class="badge">7 candidates · 5 questions each · bilingual</div>
+</div>
+
+<div class="container">
+  <div class="tip">💡 点击英文播放器可朗读英文问题，支持速度调节。首次使用请允许浏览器语音权限。</div>
+  
+    <div class="candidate-section" id="cand-0">
+      <div class="candidate-header" onclick="toggleSection(0)">
+        <span class="cand-name">Henrique Mattos</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-0" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-0">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你在SP西区开拓SMBX，如果给你整个SP城市的资源，你会怎么重新设计覆盖策略？优先级怎么排？</div>
+            <div class="en-text">You built SMBX in SP West. If you had resources for the whole SP city, how would you redesign the coverage strategy? What is your priority order?</div>
+            <div class="player" id="player-c0q0">
+              <button class="btn-play" onclick="togglePlay('c0q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c0q0">0:00</div>
+                <div class="progress-bar" id="bar-c0q0" onclick="seekTo(event, 'c0q0')">
+                  <div class="progress-fill" id="fill-c0q0"></div>
+                  <div class="progress-thumb" id="thumb-c0q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c0q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c0q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c0q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你的办公室提案模式在现有团队规模下运作良好——如果团队扩张到15人，这套方法还能规模化吗？你怎么保证质量？</div>
+            <div class="en-text">Your office pitch model works well now. If your team grows to 15 BDs, can this method scale? How do you keep the quality?</div>
+            <div class="player" id="player-c0q1">
+              <button class="btn-play" onclick="togglePlay('c0q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c0q1">0:00</div>
+                <div class="progress-bar" id="bar-c0q1" onclick="seekTo(event, 'c0q1')">
+                  <div class="progress-fill" id="fill-c0q1"></div>
+                  <div class="progress-thumb" id="thumb-c0q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c0q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c0q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c0q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你提到跨行业培养BD——这些BD在Keeta的学习曲线比餐饮背景BD长还是短？你用什么方式缩短适应期？</div>
+            <div class="en-text">You mentioned coaching BDs from other industries. Is their learning curve longer or shorter than BDs with food background? How do you help them adapt faster?</div>
+            <div class="player" id="player-c0q2">
+              <button class="btn-play" onclick="togglePlay('c0q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c0q2">0:00</div>
+                <div class="progress-bar" id="bar-c0q2" onclick="seekTo(event, 'c0q2')">
+                  <div class="progress-fill" id="fill-c0q2"></div>
+                  <div class="progress-thumb" id="thumb-c0q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c0q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c0q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c0q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：当一个BD表现持续中等、没有突破迹象时，你如何判断是继续培养还是调整岗位？</div>
+            <div class="en-text">When a BD stays average for a long time with no sign of improvement, how do you decide: keep coaching or make a change?</div>
+            <div class="player" id="player-c0q3">
+              <button class="btn-play" onclick="togglePlay('c0q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c0q3">0:00</div>
+                <div class="progress-bar" id="bar-c0q3" onclick="seekTo(event, 'c0q3')">
+                  <div class="progress-fill" id="fill-c0q3"></div>
+                  <div class="progress-thumb" id="thumb-c0q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c0q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c0q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c0q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：K4和K5在你看来最核心的差异是什么？你现在距离你自己定义的K5标准还差哪一块？</div>
+            <div class="en-text">What is the most important difference between K4 and K5 in your view? What is the one thing you still need to reach your own K5 standard?</div>
+            <div class="player" id="player-c0q4">
+              <button class="btn-play" onclick="togglePlay('c0q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c0q4">0:00</div>
+                <div class="progress-bar" id="bar-c0q4" onclick="seekTo(event, 'c0q4')">
+                  <div class="progress-fill" id="fill-c0q4"></div>
+                  <div class="progress-thumb" id="thumb-c0q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c0q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c0q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c0q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c0q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-1">
+      <div class="candidate-header" onclick="toggleSection(1)">
+        <span class="cand-name">Caio Guijarro</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-1" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-1">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你识别了Santos的SMB/SMBX 1%缺口并量化了10k+机会——如果让你今天制定Santos未来一年的增长计划，你从哪里切入？</div>
+            <div class="en-text">You found a 1% gap and 10k+ opportunity in Santos. If you had to build a one-year growth plan for Santos today, where do you start?</div>
+            <div class="player" id="player-c1q0">
+              <button class="btn-play" onclick="togglePlay('c1q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c1q0">0:00</div>
+                <div class="progress-bar" id="bar-c1q0" onclick="seekTo(event, 'c1q0')">
+                  <div class="progress-fill" id="fill-c1q0"></div>
+                  <div class="progress-thumb" id="thumb-c1q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c1q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c1q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c1q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：Santos和SP市场在商家结构上有什么本质不同？你的打法会怎么因地制宜地调整？</div>
+            <div class="en-text">What is the key difference between Santos and SP in terms of merchant mix? How would you adjust your approach?</div>
+            <div class="player" id="player-c1q1">
+              <button class="btn-play" onclick="togglePlay('c1q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c1q1">0:00</div>
+                <div class="progress-bar" id="bar-c1q1" onclick="seekTo(event, 'c1q1')">
+                  <div class="progress-fill" id="fill-c1q1"></div>
+                  <div class="progress-thumb" id="thumb-c1q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c1q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c1q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c1q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你在职时间较短——你认为自己在团队管理上还没有被充分检验的方面有哪些？你打算怎么弥补？</div>
+            <div class="en-text">You have been in this role for a short time. What areas of team management do you think have not been fully tested yet? How will you develop those?</div>
+            <div class="player" id="player-c1q2">
+              <button class="btn-play" onclick="togglePlay('c1q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c1q2">0:00</div>
+                <div class="progress-bar" id="bar-c1q2" onclick="seekTo(event, 'c1q2')">
+                  <div class="progress-fill" id="fill-c1q2"></div>
+                  <div class="progress-thumb" id="thumb-c1q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c1q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c1q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c1q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：如果你明天要培养一名新BD、从零开始，你会设计怎样的前30天计划？</div>
+            <div class="en-text">If you had to onboard a brand new BD starting tomorrow, what does your first 30-day plan look like?</div>
+            <div class="player" id="player-c1q3">
+              <button class="btn-play" onclick="togglePlay('c1q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c1q3">0:00</div>
+                <div class="progress-bar" id="bar-c1q3" onclick="seekTo(event, 'c1q3')">
+                  <div class="progress-fill" id="fill-c1q3"></div>
+                  <div class="progress-thumb" id="thumb-c1q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c1q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c1q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c1q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：你申请K5的时机比大多数候选人早很多——你自己怎么看这个决定？如果这次没有通过，你的下一步是什么？</div>
+            <div class="en-text">You are applying for K5 much earlier than most. How do you think about that decision? If you do not pass this time, what is your next step?</div>
+            <div class="player" id="player-c1q4">
+              <button class="btn-play" onclick="togglePlay('c1q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c1q4">0:00</div>
+                <div class="progress-bar" id="bar-c1q4" onclick="seekTo(event, 'c1q4')">
+                  <div class="progress-fill" id="fill-c1q4"></div>
+                  <div class="progress-thumb" id="thumb-c1q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c1q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c1q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c1q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c1q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-2">
+      <div class="candidate-header" onclick="toggleSection(2)">
+        <span class="cand-name">Daisa Biancalana</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-2" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-2">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你在Guarulhos做了非常深入的品类分析——如果把这套框架复制到另一个城市，哪些是可移植的，哪些是Guarulhos特有的？</div>
+            <div class="en-text">You did a very deep category analysis in Guarulhos. If you move this framework to another city, what parts can be copied and what parts are specific to Guarulhos?</div>
+            <div class="player" id="player-c2q0">
+              <button class="btn-play" onclick="togglePlay('c2q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c2q0">0:00</div>
+                <div class="progress-bar" id="bar-c2q0" onclick="seekTo(event, 'c2q0')">
+                  <div class="progress-fill" id="fill-c2q0"></div>
+                  <div class="progress-thumb" id="thumb-c2q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c2q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c2q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c2q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你的市场渗透率分析显示还有增长空间——作为K5 BDM，你会如何影响CM和更高层级来落地这个增长？</div>
+            <div class="en-text">Your analysis shows there is still room to grow. As a K5 BDM, how would you influence your CM and leadership to act on this opportunity?</div>
+            <div class="player" id="player-c2q1">
+              <button class="btn-play" onclick="togglePlay('c2q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c2q1">0:00</div>
+                <div class="progress-bar" id="bar-c2q1" onclick="seekTo(event, 'c2q1')">
+                  <div class="progress-fill" id="fill-c2q1"></div>
+                  <div class="progress-thumb" id="thumb-c2q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c2q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c2q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c2q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你提到团队合并危机，1个月内重建并回到顶尖——你当时做了哪些具体的管理决策？团队情绪怎么管理的？</div>
+            <div class="en-text">You mentioned a team merger crisis and getting back to top in one month. What specific management decisions did you make? How did you handle team morale?</div>
+            <div class="player" id="player-c2q2">
+              <button class="btn-play" onclick="togglePlay('c2q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c2q2">0:00</div>
+                <div class="progress-bar" id="bar-c2q2" onclick="seekTo(event, 'c2q2')">
+                  <div class="progress-fill" id="fill-c2q2"></div>
+                  <div class="progress-thumb" id="thumb-c2q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c2q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c2q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c2q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你团队里最弱的BD是什么状态？你是如何给他或她设定目标和反馈机制的？</div>
+            <div class="en-text">Who is the weakest BD in your team right now? How do you set goals and give feedback to that person?</div>
+            <div class="player" id="player-c2q3">
+              <button class="btn-play" onclick="togglePlay('c2q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c2q3">0:00</div>
+                <div class="progress-bar" id="bar-c2q3" onclick="seekTo(event, 'c2q3')">
+                  <div class="progress-fill" id="fill-c2q3"></div>
+                  <div class="progress-thumb" id="thumb-c2q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c2q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c2q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c2q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：你在分析层面很强——但K5还需要跨层级影响力。你认为自己在这方面的短板是什么？</div>
+            <div class="en-text">Your analytical skills are strong. But K5 also requires cross-level influence. What do you think is your gap in that area?</div>
+            <div class="player" id="player-c2q4">
+              <button class="btn-play" onclick="togglePlay('c2q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c2q4">0:00</div>
+                <div class="progress-bar" id="bar-c2q4" onclick="seekTo(event, 'c2q4')">
+                  <div class="progress-fill" id="fill-c2q4"></div>
+                  <div class="progress-thumb" id="thumb-c2q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c2q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c2q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c2q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c2q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-3">
+      <div class="candidate-header" onclick="toggleSection(3)">
+        <span class="cand-name">Danielle Ferreira</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-3" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-3">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你带团队在WOB区域交付了5人7HC——如果让你接手一个新区域，你从哪里开始判断优先级？你的决策框架是什么？</div>
+            <div class="en-text">You delivered 5 people 7 HC in WOB. If you take over a new territory, how do you decide where to focus first? What is your decision framework?</div>
+            <div class="player" id="player-c3q0">
+              <button class="btn-play" onclick="togglePlay('c3q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c3q0">0:00</div>
+                <div class="progress-bar" id="bar-c3q0" onclick="seekTo(event, 'c3q0')">
+                  <div class="progress-fill" id="fill-c3q0"></div>
+                  <div class="progress-thumb" id="thumb-c3q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c3q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c3q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c3q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你2月份全国最佳BDM——作为K5，你会如何把自己的打法系统化、让其他BDM也能复制？</div>
+            <div class="en-text">You were the best BDM in Brazil in February. As a K5, how would you turn your approach into a system that other BDMs can follow?</div>
+            <div class="player" id="player-c3q1">
+              <button class="btn-play" onclick="togglePlay('c3q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c3q1">0:00</div>
+                <div class="progress-bar" id="bar-c3q1" onclick="seekTo(event, 'c3q1')">
+                  <div class="progress-fill" id="fill-c3q1"></div>
+                  <div class="progress-thumb" id="thumb-c3q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c3q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c3q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c3q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你的材料对每个BD的分析非常详细——你是如何建立这套持续追踪机制的？多久做一次？触发点是什么？</div>
+            <div class="en-text">Your material has very detailed analysis for each BD. How did you build this tracking system? How often do you do it and what triggers a review?</div>
+            <div class="player" id="player-c3q2">
+              <button class="btn-play" onclick="togglePlay('c3q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c3q2">0:00</div>
+                <div class="progress-bar" id="bar-c3q2" onclick="seekTo(event, 'c3q2')">
+                  <div class="progress-fill" id="fill-c3q2"></div>
+                  <div class="progress-thumb" id="thumb-c3q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c3q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c3q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c3q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：在你团队里，你最近一次不得不做出艰难决定是什么时候？具体是什么决定？</div>
+            <div class="en-text">When was the last time you had to make a really difficult decision about your team? What was the decision?</div>
+            <div class="player" id="player-c3q3">
+              <button class="btn-play" onclick="togglePlay('c3q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c3q3">0:00</div>
+                <div class="progress-bar" id="bar-c3q3" onclick="seekTo(event, 'c3q3')">
+                  <div class="progress-fill" id="fill-c3q3"></div>
+                  <div class="progress-thumb" id="thumb-c3q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c3q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c3q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c3q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：从BDM到K5，你觉得最难跨越的一步是什么？你现在在这条路上走到哪里了？</div>
+            <div class="en-text">What is the hardest step to go from BDM to K5? Where are you on that journey right now?</div>
+            <div class="player" id="player-c3q4">
+              <button class="btn-play" onclick="togglePlay('c3q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c3q4">0:00</div>
+                <div class="progress-bar" id="bar-c3q4" onclick="seekTo(event, 'c3q4')">
+                  <div class="progress-fill" id="fill-c3q4"></div>
+                  <div class="progress-thumb" id="thumb-c3q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c3q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c3q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c3q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c3q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-4">
+      <div class="candidate-header" onclick="toggleSection(4)">
+        <span class="cand-name">Renata Leite</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-4" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-4">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你代理CM期间城市运营率86%——如果目标是95%，你会从哪个杠杆入手？预计需要多长时间？</div>
+            <div class="en-text">Operating rate was 86% during your acting CM period. If the target is 95%, where do you pull the lever first? How long do you think it would take?</div>
+            <div class="player" id="player-c4q0">
+              <button class="btn-play" onclick="togglePlay('c4q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c4q0">0:00</div>
+                <div class="progress-bar" id="bar-c4q0" onclick="seekTo(event, 'c4q0')">
+                  <div class="progress-fill" id="fill-c4q0"></div>
+                  <div class="progress-thumb" id="thumb-c4q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c4q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c4q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c4q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你同时管理多个BDM和整体城市运营——你是怎么分配自己的时间的？什么情况下你会亲自介入？</div>
+            <div class="en-text">You manage multiple BDMs and the whole city operation at the same time. How do you decide where to spend your time? When do you step in directly?</div>
+            <div class="player" id="player-c4q1">
+              <button class="btn-play" onclick="togglePlay('c4q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c4q1">0:00</div>
+                <div class="progress-bar" id="bar-c4q1" onclick="seekTo(event, 'c4q1')">
+                  <div class="progress-fill" id="fill-c4q1"></div>
+                  <div class="progress-thumb" id="thumb-c4q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c4q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c4q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c4q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你培养了Sabrina成为BDM——从BD到BDM这个跃升，你在Sabrina身上具体做了哪些干预？关键转折点是什么？</div>
+            <div class="en-text">You developed Sabrina into a BDM. What specific things did you do to help her make that jump from BD to BDM? What was the turning point?</div>
+            <div class="player" id="player-c4q2">
+              <button class="btn-play" onclick="togglePlay('c4q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c4q2">0:00</div>
+                <div class="progress-bar" id="bar-c4q2" onclick="seekTo(event, 'c4q2')">
+                  <div class="progress-fill" id="fill-c4q2"></div>
+                  <div class="progress-thumb" id="thumb-c4q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c4q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c4q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c4q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你建立了4步招聘方法论——这套方法在实际执行中遇到过哪些问题？你是怎么迭代的？</div>
+            <div class="en-text">You built a 4-step recruitment method. What problems did you run into when using it in practice? How did you improve it?</div>
+            <div class="player" id="player-c4q3">
+              <button class="btn-play" onclick="togglePlay('c4q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c4q3">0:00</div>
+                <div class="progress-bar" id="bar-c4q3" onclick="seekTo(event, 'c4q3')">
+                  <div class="progress-fill" id="fill-c4q3"></div>
+                  <div class="progress-thumb" id="thumb-c4q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c4q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c4q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c4q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：你已经在K5层级运作了一段时间——正式晋升和现在的代理状态，对你的工作方式会有什么实质性变化？</div>
+            <div class="en-text">You have been operating at K5 level for a while now. If you get the official title, what will actually change in how you work?</div>
+            <div class="player" id="player-c4q4">
+              <button class="btn-play" onclick="togglePlay('c4q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c4q4">0:00</div>
+                <div class="progress-bar" id="bar-c4q4" onclick="seekTo(event, 'c4q4')">
+                  <div class="progress-fill" id="fill-c4q4"></div>
+                  <div class="progress-thumb" id="thumb-c4q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c4q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c4q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c4q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c4q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-5">
+      <div class="candidate-header" onclick="toggleSection(5)">
+        <span class="cand-name">Marcos Cruz</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-5" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-5">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你在City B 10个月把团队从0带到区域领先——如果现在给你一个新城市，你会复制哪些打法？哪些需要调整？</div>
+            <div class="en-text">You took City B from zero to regional leader in 10 months. If you get a new city tomorrow, what do you copy and what do you change?</div>
+            <div class="player" id="player-c5q0">
+              <button class="btn-play" onclick="togglePlay('c5q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c5q0">0:00</div>
+                <div class="progress-bar" id="bar-c5q0" onclick="seekTo(event, 'c5q0')">
+                  <div class="progress-fill" id="fill-c5q0"></div>
+                  <div class="progress-thumb" id="thumb-c5q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c5q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c5q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c5q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你团队里有7位获奖BD——作为K5 BDM，你如何影响这些人向更高层级发展？你有没有在培养下一个BDM候选人？</div>
+            <div class="en-text">You have 7 award-winning BDs on your team. As a K5, how do you help them grow further? Are you already developing your next BDM candidate?</div>
+            <div class="player" id="player-c5q1">
+              <button class="btn-play" onclick="togglePlay('c5q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c5q1">0:00</div>
+                <div class="progress-bar" id="bar-c5q1" onclick="seekTo(event, 'c5q1')">
+                  <div class="progress-fill" id="fill-c5q1"></div>
+                  <div class="progress-thumb" id="thumb-c5q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c5q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c5q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c5q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你带出了全批最强的BD获奖成绩——你的带教方法是什么？你是怎么识别哪些BD有晋升潜力的？</div>
+            <div class="en-text">Your team has the strongest BD award results in this group. What is your coaching method? How do you identify which BDs have promotion potential?</div>
+            <div class="player" id="player-c5q2">
+              <button class="btn-play" onclick="togglePlay('c5q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c5q2">0:00</div>
+                <div class="progress-bar" id="bar-c5q2" onclick="seekTo(event, 'c5q2')">
+                  <div class="progress-fill" id="fill-c5q2"></div>
+                  <div class="progress-thumb" id="thumb-c5q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c5q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c5q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c5q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：当团队整体成绩好但某个BD持续拉低均值时，你会怎么处理？</div>
+            <div class="en-text">When your team is doing well overall but one BD keeps pulling down the average, what do you do?</div>
+            <div class="player" id="player-c5q3">
+              <button class="btn-play" onclick="togglePlay('c5q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c5q3">0:00</div>
+                <div class="progress-bar" id="bar-c5q3" onclick="seekTo(event, 'c5q3')">
+                  <div class="progress-fill" id="fill-c5q3"></div>
+                  <div class="progress-thumb" id="thumb-c5q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c5q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c5q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c5q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：K5 BDM和K4 BDM在管理风格上最大的不同是什么？你觉得自己现在哪个地方还在用K4的方式做事？</div>
+            <div class="en-text">What is the biggest difference in management style between K4 and K5 BDM? Where do you think you are still behaving like a K4?</div>
+            <div class="player" id="player-c5q4">
+              <button class="btn-play" onclick="togglePlay('c5q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c5q4">0:00</div>
+                <div class="progress-bar" id="bar-c5q4" onclick="seekTo(event, 'c5q4')">
+                  <div class="progress-fill" id="fill-c5q4"></div>
+                  <div class="progress-thumb" id="thumb-c5q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c5q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c5q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c5q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c5q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="candidate-section" id="cand-6">
+      <div class="candidate-header" onclick="toggleSection(6)">
+        <span class="cand-name">Bianca Ceotto</span>
+        <span class="cand-count">5 questions</span>
+        <svg class="chevron" id="chev-6" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="candidate-body" id="body-6">
+        
+        <div class="question-card">
+          <div class="question-number">Q1</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：你在City B持续第一——如果给你拓展到另一个城市，你会怎么快速建立竞争优势？你最可以迁移的能力是什么？</div>
+            <div class="en-text">You are consistently number one in City B. If you move to a new city, how do you build a competitive advantage quickly? What is your most transferable skill?</div>
+            <div class="player" id="player-c6q0">
+              <button class="btn-play" onclick="togglePlay('c6q0')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c6q0">0:00</div>
+                <div class="progress-bar" id="bar-c6q0" onclick="seekTo(event, 'c6q0')">
+                  <div class="progress-fill" id="fill-c6q0"></div>
+                  <div class="progress-thumb" id="thumb-c6q0"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c6q0', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c6q0', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q0', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q0', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c6q0')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q2</div>
+          <div class="question-content">
+            <div class="cn-text">战略思维：City B之外，你觉得Keeta Brazil整体的市场机会在哪里？作为K5 BDM，你会如何向上影响城市或区域策略？</div>
+            <div class="en-text">Beyond City B, where do you think the biggest market opportunity is for Keeta Brazil? As a K5, how would you influence city or regional strategy?</div>
+            <div class="player" id="player-c6q1">
+              <button class="btn-play" onclick="togglePlay('c6q1')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c6q1">0:00</div>
+                <div class="progress-bar" id="bar-c6q1" onclick="seekTo(event, 'c6q1')">
+                  <div class="progress-fill" id="fill-c6q1"></div>
+                  <div class="progress-thumb" id="thumb-c6q1"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c6q1', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c6q1', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q1', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q1', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c6q1')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q3</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你的成绩稳定性很强——这背后是什么管理机制在支撑？你怎么让团队持续保持高水位？</div>
+            <div class="en-text">Your results are very consistent. What management system sits behind that? How do you keep the team at a high level over time?</div>
+            <div class="player" id="player-c6q2">
+              <button class="btn-play" onclick="togglePlay('c6q2')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c6q2">0:00</div>
+                <div class="progress-bar" id="bar-c6q2" onclick="seekTo(event, 'c6q2')">
+                  <div class="progress-fill" id="fill-c6q2"></div>
+                  <div class="progress-thumb" id="thumb-c6q2"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c6q2', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c6q2', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q2', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q2', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c6q2')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q4</div>
+          <div class="question-content">
+            <div class="cn-text">管理深度：你团队里有没有过高潜力BD离职的情况？你是怎么处理的？反思下来，你会做什么不一样的事？</div>
+            <div class="en-text">Have you ever had a high-potential BD leave your team? How did you handle it? Looking back, what would you do differently?</div>
+            <div class="player" id="player-c6q3">
+              <button class="btn-play" onclick="togglePlay('c6q3')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c6q3">0:00</div>
+                <div class="progress-bar" id="bar-c6q3" onclick="seekTo(event, 'c6q3')">
+                  <div class="progress-fill" id="fill-c6q3"></div>
+                  <div class="progress-thumb" id="thumb-c6q3"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c6q3', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c6q3', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q3', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q3', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c6q3')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+        <div class="question-card">
+          <div class="question-number">Q5</div>
+          <div class="question-content">
+            <div class="cn-text">K5自我认知：你对K5最大的理解是什么？你认为自己现在还缺少什么来完全符合K5的标准？</div>
+            <div class="en-text">What is your biggest understanding of what K5 means? What do you think you still need to fully meet the K5 standard?</div>
+            <div class="player" id="player-c6q4">
+              <button class="btn-play" onclick="togglePlay('c6q4')" title="播放/暂停">
+                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+              </button>
+              <div class="progress-area">
+                <div class="time-display" id="time-c6q4">0:00</div>
+                <div class="progress-bar" id="bar-c6q4" onclick="seekTo(event, 'c6q4')">
+                  <div class="progress-fill" id="fill-c6q4"></div>
+                  <div class="progress-thumb" id="thumb-c6q4"></div>
+                </div>
+              </div>
+              <div class="speed-group">
+                <button class="btn-speed active" onclick="setSpeed('c6q4', 0.75, this)">0.75×</button>
+                <button class="btn-speed active-speed" onclick="setSpeed('c6q4', 1.0, this)">1×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q4', 1.25, this)">1.25×</button>
+                <button class="btn-speed" onclick="setSpeed('c6q4', 1.5, this)">1.5×</button>
+              </div>
+              <button class="btn-stop" onclick="stopPlay('c6q4')" title="停止">■</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// TTS State Management
+// ─────────────────────────────────────────────
+const state = {};
+let currentUid = null;
+let progressInterval = null;
+
+const TEXTS = {};
+
+// Inject texts
+const TEXTS_DATA = {"c0q0": "You built SMBX in SP West. If you had resources for the whole SP city, how would you redesign the coverage strategy? What is your priority order?", "c0q1": "Your office pitch model works well now. If your team grows to 15 BDs, can this method scale? How do you keep the quality?", "c0q2": "You mentioned coaching BDs from other industries. Is their learning curve longer or shorter than BDs with food background? How do you help them adapt faster?", "c0q3": "When a BD stays average for a long time with no sign of improvement, how do you decide: keep coaching or make a change?", "c0q4": "What is the most important difference between K4 and K5 in your view? What is the one thing you still need to reach your own K5 standard?", "c1q0": "You found a 1% gap and 10k+ opportunity in Santos. If you had to build a one-year growth plan for Santos today, where do you start?", "c1q1": "What is the key difference between Santos and SP in terms of merchant mix? How would you adjust your approach?", "c1q2": "You have been in this role for a short time. What areas of team management do you think have not been fully tested yet? How will you develop those?", "c1q3": "If you had to onboard a brand new BD starting tomorrow, what does your first 30-day plan look like?", "c1q4": "You are applying for K5 much earlier than most. How do you think about that decision? If you do not pass this time, what is your next step?", "c2q0": "You did a very deep category analysis in Guarulhos. If you move this framework to another city, what parts can be copied and what parts are specific to Guarulhos?", "c2q1": "Your analysis shows there is still room to grow. As a K5 BDM, how would you influence your CM and leadership to act on this opportunity?", "c2q2": "You mentioned a team merger crisis and getting back to top in one month. What specific management decisions did you make? How did you handle team morale?", "c2q3": "Who is the weakest BD in your team right now? How do you set goals and give feedback to that person?", "c2q4": "Your analytical skills are strong. But K5 also requires cross-level influence. What do you think is your gap in that area?", "c3q0": "You delivered 5 people 7 HC in WOB. If you take over a new territory, how do you decide where to focus first? What is your decision framework?", "c3q1": "You were the best BDM in Brazil in February. As a K5, how would you turn your approach into a system that other BDMs can follow?", "c3q2": "Your material has very detailed analysis for each BD. How did you build this tracking system? How often do you do it and what triggers a review?", "c3q3": "When was the last time you had to make a really difficult decision about your team? What was the decision?", "c3q4": "What is the hardest step to go from BDM to K5? Where are you on that journey right now?", "c4q0": "Operating rate was 86% during your acting CM period. If the target is 95%, where do you pull the lever first? How long do you think it would take?", "c4q1": "You manage multiple BDMs and the whole city operation at the same time. How do you decide where to spend your time? When do you step in directly?", "c4q2": "You developed Sabrina into a BDM. What specific things did you do to help her make that jump from BD to BDM? What was the turning point?", "c4q3": "You built a 4-step recruitment method. What problems did you run into when using it in practice? How did you improve it?", "c4q4": "You have been operating at K5 level for a while now. If you get the official title, what will actually change in how you work?", "c5q0": "You took City B from zero to regional leader in 10 months. If you get a new city tomorrow, what do you copy and what do you change?", "c5q1": "You have 7 award-winning BDs on your team. As a K5, how do you help them grow further? Are you already developing your next BDM candidate?", "c5q2": "Your team has the strongest BD award results in this group. What is your coaching method? How do you identify which BDs have promotion potential?", "c5q3": "When your team is doing well overall but one BD keeps pulling down the average, what do you do?", "c5q4": "What is the biggest difference in management style between K4 and K5 BDM? Where do you think you are still behaving like a K4?", "c6q0": "You are consistently number one in City B. If you move to a new city, how do you build a competitive advantage quickly? What is your most transferable skill?", "c6q1": "Beyond City B, where do you think the biggest market opportunity is for Keeta Brazil? As a K5, how would you influence city or regional strategy?", "c6q2": "Your results are very consistent. What management system sits behind that? How do you keep the team at a high level over time?", "c6q3": "Have you ever had a high-potential BD leave your team? How did you handle it? Looking back, what would you do differently?", "c6q4": "What is your biggest understanding of what K5 means? What do you think you still need to fully meet the K5 standard?"};
+
+// ─────────────────────────────────────────────
+// Section Toggle
+// ─────────────────────────────────────────────
+function toggleSection(ci) {
+  const body = document.getElementById('body-' + ci);
+  const chev = document.getElementById('chev-' + ci);
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  chev.classList.toggle('open', !isOpen);
+}
+
+// All open by default, close on init except first
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.candidate-body').forEach((b, i) => {
+    if (i > 0) b.style.display = 'none';
+    else document.getElementById('chev-' + i).classList.add('open');
+  });
+});
+
+// ─────────────────────────────────────────────
+// TTS Engine
+// ─────────────────────────────────────────────
+function getVoice() {
+  const voices = speechSynthesis.getVoices();
+  const pref = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
+    || voices.find(v => v.lang.startsWith('en-US'))
+    || voices.find(v => v.lang.startsWith('en'))
+    || null;
+  return pref;
+}
+
+function estDuration(text) {
+  // ~140 wpm baseline
+  const words = text.trim().split(/\s+/).length;
+  return (words / 140) * 60;
+}
+
+function stopAll() {
+  speechSynthesis.cancel();
+  if (progressInterval) clearInterval(progressInterval);
+  progressInterval = null;
+  if (currentUid) {
+    setPlayerState(currentUid, false);
+    currentUid = null;
+  }
+}
+
+function setPlayerState(uid, playing) {
+  const btn = document.querySelector('#player-' + uid + ' .btn-play');
+  if (!btn) return;
+  const iconPlay = btn.querySelector('.icon-play');
+  const iconPause = btn.querySelector('.icon-pause');
+  iconPlay.style.display = playing ? 'none' : 'block';
+  iconPause.style.display = playing ? 'block' : 'none';
+  btn.classList.toggle('playing', playing);
+}
+
+function updateProgress(uid, elapsed, total) {
+  const pct = Math.min(elapsed / total, 1) * 100;
+  const fill = document.getElementById('fill-' + uid);
+  const thumb = document.getElementById('thumb-' + uid);
+  const timeEl = document.getElementById('time-' + uid);
+  if (fill) fill.style.width = pct + '%';
+  if (thumb) thumb.style.right = 'calc(100% - ' + pct + '%)';
+  const secs = Math.floor(elapsed);
+  if (timeEl) timeEl.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
+}
+
+function togglePlay(uid) {
+  if (currentUid === uid) {
+    // Already this one playing — pause/resume
+    if (state[uid] && state[uid].paused) {
+      speechSynthesis.resume();
+      state[uid].paused = false;
+      setPlayerState(uid, true);
+      startProgressInterval(uid);
+    } else {
+      speechSynthesis.pause();
+      if (state[uid]) state[uid].paused = true;
+      setPlayerState(uid, false);
+      if (progressInterval) clearInterval(progressInterval);
+    }
+    return;
+  }
+  
+  // Stop any current
+  stopAll();
+  
+  const text = TEXTS_DATA[uid];
+  if (!text) return;
+  
+  const utter = new SpeechSynthesisUtterance(text);
+  const speed = state[uid] ? (state[uid].speed || 1.0) : 1.0;
+  utter.rate = speed;
+  utter.lang = 'en-US';
+  const voice = getVoice();
+  if (voice) utter.voice = voice;
+  
+  const totalDur = estDuration(text) / speed;
+  state[uid] = { utter, speed, paused: false, startTime: Date.now(), elapsed: 0, total: totalDur };
+  currentUid = uid;
+  
+  utter.onend = () => {
+    if (progressInterval) clearInterval(progressInterval);
+    updateProgress(uid, totalDur, totalDur);
+    setPlayerState(uid, false);
+    currentUid = null;
+  };
+  utter.onerror = () => {
+    stopAll();
+  };
+  
+  speechSynthesis.speak(utter);
+  setPlayerState(uid, true);
+  startProgressInterval(uid);
+}
+
+function startProgressInterval(uid) {
+  if (progressInterval) clearInterval(progressInterval);
+  const s = state[uid];
+  progressInterval = setInterval(() => {
+    if (!s || s.paused) return;
+    const elapsed = s.elapsed + (Date.now() - s.startTime) / 1000;
+    updateProgress(uid, elapsed, s.total);
+    if (elapsed >= s.total) clearInterval(progressInterval);
+  }, 100);
+  s.startTime = Date.now();
+}
+
+function stopPlay(uid) {
+  if (currentUid === uid) stopAll();
+  updateProgress(uid, 0, 1);
+  if (state[uid]) { state[uid].elapsed = 0; }
+  const timeEl = document.getElementById('time-' + uid);
+  if (timeEl) timeEl.textContent = '0:00';
+}
+
+function seekTo(event, uid) {
+  const bar = document.getElementById('bar-' + uid);
+  if (!bar) return;
+  const rect = bar.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+  
+  if (currentUid !== uid) {
+    // Just update visual, don't start
+    const text = TEXTS_DATA[uid];
+    const total = estDuration(text);
+    updateProgress(uid, pct * total, total);
+    return;
+  }
+  
+  // Restart from position (Web Speech API can't truly seek, restart with offset simulation)
+  const s = state[uid];
+  speechSynthesis.cancel();
+  if (progressInterval) clearInterval(progressInterval);
+  
+  const text = TEXTS_DATA[uid];
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = s.speed || 1.0;
+  utter.lang = 'en-US';
+  const voice = getVoice();
+  if (voice) utter.voice = voice;
+  
+  const totalDur = estDuration(text) / (s.speed || 1.0);
+  const newElapsed = pct * totalDur;
+  
+  state[uid] = { utter, speed: s.speed || 1.0, paused: false, startTime: Date.now(), elapsed: newElapsed, total: totalDur };
+  
+  utter.onend = () => {
+    if (progressInterval) clearInterval(progressInterval);
+    updateProgress(uid, totalDur, totalDur);
+    setPlayerState(uid, false);
+    currentUid = null;
+  };
+  
+  speechSynthesis.speak(utter);
+  setPlayerState(uid, true);
+  startProgressInterval(uid);
+  updateProgress(uid, newElapsed, totalDur);
+}
+
+function setSpeed(uid, spd, btn) {
+  // Update active button
+  const player = document.getElementById('player-' + uid);
+  player.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active-speed'));
+  btn.classList.add('active-speed');
+  
+  if (!state[uid]) state[uid] = {};
+  state[uid].speed = spd;
+  
+  // If currently playing this uid, restart with new speed
+  if (currentUid === uid) {
+    const text = TEXTS_DATA[uid];
+    const s = state[uid];
+    const elapsed = s.elapsed + (Date.now() - s.startTime) / 1000;
+    
+    speechSynthesis.cancel();
+    if (progressInterval) clearInterval(progressInterval);
+    
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = spd;
+    utter.lang = 'en-US';
+    const voice = getVoice();
+    if (voice) utter.voice = voice;
+    
+    const totalDur = estDuration(text) / spd;
+    state[uid] = { utter, speed: spd, paused: false, startTime: Date.now(), elapsed, total: totalDur };
+    
+    utter.onend = () => {
+      if (progressInterval) clearInterval(progressInterval);
+      updateProgress(uid, totalDur, totalDur);
+      setPlayerState(uid, false);
+      currentUid = null;
+    };
+    
+    speechSynthesis.speak(utter);
+    setPlayerState(uid, true);
+    startProgressInterval(uid);
+  }
+}
+
+// Init voices
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = () => {};
+}
+</script>
+
+</body>
+</html>
